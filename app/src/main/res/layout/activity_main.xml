@@ -12,14 +12,14 @@
     tools:context=".main.MainActivity">
 
     <Button
-        android:id="@+id/show"
+        android:id="@+id/showDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="show"/>
+        android:text="showDialog"/>
 
     <Button
-        android:id="@+id/dismiss"
+        android:id="@+id/format"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="dismiss"/>
+        android:text="format"/>
 </LinearLayout>

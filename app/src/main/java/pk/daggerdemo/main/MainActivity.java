@@ -1,61 +1,74 @@
 package pk.daggerdemo.main;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import pk.daggerdemo.R;
-import pk.daggerdemo.application.ApplicationComponent;
-import pk.daggerdemo.application.DaggerApplication;
-import pk.daggerdemo.main.compontent.Api;
-import pk.daggerdemo.main.compontent.DialogApi;
+import pk.daggerdemo.api.Api;
+import pk.daggerdemo.button.Content;
+import pk.daggerdemo.dagger.activity.ActivityModule;
+import pk.daggerdemo.dagger.main.DaggerMainComponent;
+import pk.daggerdemo.dagger.main.MainComponent;
+import pk.daggerdemo.dagger.main.MainModule;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
-    private DialogApi api;
-    private Api a;
-    private Button show, dismiss;
+    private Button showDialog, format;
+    @Inject
+    Content content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ApplicationComponent applicationComponent = ((DaggerApplication) getApplication()).getApplicationComponent();
-        ActivityComponent activityCompontent = DaggerActivityComponent.builder()
-                .applicationComponent(applicationComponent)
+//        AppComponent applicationComponent = ((DaggerApplication) getApplication()).getAppComponent();
+//        ActivityComponent activityCompontent = DaggerActivityComponent.builder()
+//                .appComponent(applicationComponent)
+//                .activityModule(new ActivityModule(this))
+//                .build();
+//        api = activityCompontent.dialogApi();
+//        getActivityComponent().inject(this);
+        MainComponent mainComponent = DaggerMainComponent.builder()
+                .mainModule(new MainModule())
                 .activityModule(new ActivityModule(this))
                 .build();
-        api = activityCompontent.dialogApi();
+        //content = mainComponent.content();
+        mainComponent.inject(this);
 
 
         setContentView(R.layout.activity_main);
-        show = (Button) findViewById(R.id.show);
-        dismiss = (Button) findViewById(R.id.dismiss);
+        showDialog = (Button) findViewById(R.id.showDialog);
+        format = (Button) findViewById(R.id.format);
+        if (content != null) {
+            showDialog.setText(content.getDialogText());
+            format.setText(content.getApiText());
+        }
 
-
-        show.setOnClickListener(new View.OnClickListener() {
+        showDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pass()) {
-                    api.showLoadingDialog();
+                    mDialogApi.showLoadingDialog();
                 }
             }
         });
 
-        dismiss.setOnClickListener(new View.OnClickListener() {
+        format.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pass()) {
-                    api.dismiss();
-                }
+                int a = 11;
+                Api api = getAppComponent().api();
+                T(api.handle(a));
             }
         });
 
     }
 
     private boolean pass() {
-        if (api == null) {
+        if (mDialogApi == null) {
             T("api == null");
             return false;
         }

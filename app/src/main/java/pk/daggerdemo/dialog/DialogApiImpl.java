@@ -1,4 +1,4 @@
-package pk.daggerdemo.main.compontent;
+package pk.daggerdemo.dialog;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;

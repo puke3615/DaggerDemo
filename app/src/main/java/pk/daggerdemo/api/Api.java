@@ -1,4 +1,4 @@
-package pk.daggerdemo.main.compontent;
+package pk.daggerdemo.api;
 
 /**
  * @author zijiao
